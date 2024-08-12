@@ -1,0 +1,82 @@
+<div class="containt_box">
+    <div class="bg-video">
+        <img src="images/weather.webp" />
+    </div>
+    <div class="container">
+        <div class="weather_section">
+            <div class=" weather_header">
+                @if(weatherReport.hourly){
+                <div class="daliy_btn_box">
+                    <mat-button-toggle-group (change)="onToggleChange($event)" [value]="activeReport"
+                        aria-label="Weather report selection">
+                        <mat-button-toggle value="daily">Daily</mat-button-toggle>
+                        <mat-button-toggle value="weekly">Weekly</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                }
+                <form [formGroup]="weatherForm" class="search search_box_main" (ngSubmit)="doSubmitWeatherForm()">
+                    <div class="search_box">
+                        <input type="text" placeholder="Enter address" formControlName="address" required />
+                        <i class="bi bi-search"></i>
+
+                        <mat-error *ngIf="weatherForm.get('address')?.touched && weatherForm.get('address')?.invalid">
+                            Please enter a address
+                        </mat-error>
+                    </div>
+                    <button type="submit" class="search_button">Search</button>
+                </form>
+            </div>
+            <div class="weather_box">
+                <div class="weather_card">
+                    <div class="text-end">
+                        @if(weatherReport.hourly){
+                            <button (click)="downloadWeatherReport()" class="btn download-btn mt-2">Download JSON</button>
+                        }
+                    </div>
+                    <div class="weather_body">
+                        @if(weatherReport.hourly){
+                        <div class="temperature_box_main">
+                            <div class="temperature_box">
+                                <div class="box_icon">
+                                    <img [src]="getIconUrl(weatherReport.current.weather[0].icon)" alt="Weather Icon" />
+                                </div>
+                                <div class="temperature">
+                                    {{convertTemperature(weatherReport.current.temp)}}°C
+                                </div>
+                            </div>
+                            <div class="weather-description">
+                                {{weatherReport.current.weather[0].description}}
+                            </div>
+                            <div class="details_container">
+                                <div class="details_info">
+                                    <div class="details_titel">Cloudy</div>
+                                    <div class="details">{{weatherReport.current.clouds/100 | percent }}</div>
+                                </div>
+                                <div class="details_info">
+                                    <div class="details_titel">Humidity</div>
+                                    <div class="details">{{weatherReport.current.humidity/100 | percent }}</div>
+                                </div>
+                                <div class="details_info">
+                                    <div class="details_titel">Wind Speed</div>
+                                    <div class="details">{{weatherReport.current.wind_speed}} mph</div>
+                                </div>
+                                <div class="details_info">
+                                    <div class="details_titel">Feels Like</div>
+                                    <div class="details">{{weatherReport.current.feels_like | number:'1.1-1' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        <div class="chart_box">
+                            @if(!weatherReport.hourly && !isLoading){
+                            <span class="fw-bold no_data"> Please enter address to view weather information.</span>
+                            }
+                            <canvas #weatherChart></canvas>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

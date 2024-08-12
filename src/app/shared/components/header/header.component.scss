@@ -1,0 +1,22 @@
+.container {
+    position: relative;
+}
+
+header {
+    background-color: #000;
+    position: relative;
+    z-index: 1;
+
+    .header_box {
+        background-color: #000;
+        display: flex;
+        align-items: center;
+        padding: 14px 0;
+        justify-content: s;
+
+        .title_header {
+            font-size: 26px;
+            color: #fff;
+        }
+    }
+}
